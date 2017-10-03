@@ -5,6 +5,8 @@
         #:alexandria)
   (:export
    ;; Macros
+   #:define-constructor
+   #:define-print
    #:with-input-from-binary
    #:with-output-to-binary
    #:wait

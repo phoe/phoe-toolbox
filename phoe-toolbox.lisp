@@ -8,6 +8,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Macros
 
+(defmacro define-constructor ((class . keys) &body body)
+  "Defines an INITIALIZE-INSTANCE :AFTER method on the given object."
+  `(defmethod initialize-instance :after ((,class ,class)
+                                          &key ,@keys &allow-other-keys)
+     ,@body))
+
+(defmacro define-print ((object stream) &body body)
+  "Defines a PRINT-OBJECT method on the given object with
+PRINT-UNREADABLE-OBJECT."
+  `(defmethod print-object ((,object ,object) ,stream)
+     (print-unreadable-object (,object ,stream :type t :identity t)
+       ,@body)))
+
 (defmacro with-input-from-binary ((stream filespec) &body body)
   "Like WITH-OPEN-FILE, except with defaults suitable for reading from binary."
   `(with-open-file (,stream ,filespec :direction :input
