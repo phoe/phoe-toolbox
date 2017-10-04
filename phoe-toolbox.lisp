@@ -14,12 +14,26 @@
                                           &key ,@keys &allow-other-keys)
      ,@body))
 
-(defmacro define-print ((object stream) &body body)
-  "Defines a PRINT-OBJECT method on the given object with
+(defmacro define-print
+    ((object stream &key (type t) (identity t)) &body body)
+  "Defines a PRINT-OBJECT method on the given object with inserting BODY inside
 PRINT-UNREADABLE-OBJECT."
   `(defmethod print-object ((,object ,object) ,stream)
-     (print-unreadable-object (,object ,stream :type t :identity t)
+     (print-unreadable-object (,object ,stream :type ,type :identity ,identity)
        ,@body)))
+
+(defmacro define-readable-print
+    ((object stream &key (type t) (identity t)) &body body)
+  "Defines a PRINT-OBJECT method on the given object, which depends on the value
+of *PRINT-READABLY*. If it is true, then the object is printed using
+PRINT-INSTANCE-READABLY; else, it is printed with inserting BODY inside
+PRINT-UNREADABLE-OBJECT."
+  `(defmethod print-object ((,object ,object) ,stream)
+     (if *print-readably*
+         (print-instance-readably ,object ,stream)
+         (print-unreadable-object
+             (,object ,stream :type ,type :identity ,identity)
+           ,@body))))
 
 (defmacro with-input-from-binary ((stream filespec) &body body)
   "Like WITH-OPEN-FILE, except with defaults suitable for reading from binary."
@@ -153,7 +167,8 @@ not found."
                                   &optional (stream *standard-output*))
   "Prints a hash table readably using ALEXANDRIA:ALIST-HASH-TABLE."
   (let ((test (hash-table-test hash-table))
-        (*print-circle* t))
+        (*print-circle* t)
+        (*print-readably* t))
     (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE~%")
     (format stream "'~S~%" (hash-table-alist hash-table))
     (format stream "  :TEST '~A)" test)

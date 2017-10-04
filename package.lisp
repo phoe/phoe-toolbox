@@ -7,6 +7,7 @@
    ;; Macros
    #:define-constructor
    #:define-print
+   #:define-readable-print
    #:with-input-from-binary
    #:with-output-to-binary
    #:wait
