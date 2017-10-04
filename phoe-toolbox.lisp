@@ -109,9 +109,15 @@ them."
                        when (cdr cons) collect #.(format nil "~%"))))
     (apply #'concatenate 'string strings)))
 
+(defun zip (&rest lists)
+  "Collects a list of lists, where the first list contains the first element of
+the argument lists, the second list - second, etc.. The lists are as long as the
+shortest list."
+  (apply (curry #'mapcar #'list) lists))
+
 (defun bound-slots-values (instance)
-  "Given an instance of STANDARD-OBJECT, returns a list of all slot names which
-are bound in that instance."
+  "Given a generalized instance of STANDARD-OBJECT, returns a list of all slot
+names which are bound in that instance."
   (check-type instance standard-object)
   (loop for slot in (c2mop:class-direct-slots (class-of instance))
         for name = (c2mop:slot-definition-name slot)
@@ -265,3 +271,25 @@ uninterned. The tree must not contain improper lists."
   (check-type char character)
   (member char '(#\Space #\Newline #\Backspace #\Tab
                  #\Linefeed #\Page #\Return #\Rubout)))
+
+(defun print-instance-readably (object &optional (stream *standard-output*))
+  "Prints an instance readably using the #. notation with MAKE-INSTANCE.
+This function is a hack. Its functioning depends on all direct slots of a class
+being of form %FOO or FOO and having an initarg keyword called :FOO. All values
+stored in these slots need to be printable readably. Moreover, indirect slots
+are not restored."
+  (check-type object standard-object)
+  (flet ((internal-slot-keyword (symbol)
+           (let* ((string (string symbol))
+                  (percentp (eql (aref string 0) #\%))
+                  (result (if percentp (subseq (string symbol) 1) string)))
+             (values (intern result :keyword)))))
+    (let* ((class (class-name (class-of object)))
+           (slots (bound-slots-values object))
+           (values (mapcar (curry #'slot-value object) slots))
+           (keywords (mapcar #'internal-slot-keyword slots))
+           (plist (apply #'nconc (zip keywords values)))
+           (result `(make-instance ',class ,@plist)))
+      (with-standard-io-syntax
+        (let ((*print-pretty* t))
+          (format stream "#.~S" result))))))

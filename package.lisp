@@ -17,6 +17,7 @@
    #:count-digits
    #:cat
    #:catn
+   #:zip
    #:bound-slots-values
    #:vector-times
    #:assoc-value-or-die
@@ -35,4 +36,5 @@
    #:string=-getf
    #:peek-char-no-hang
    #:unintern-all-symbols
-   #:whitespacep))
+   #:whitespacep
+   #:print-instance-readably))
