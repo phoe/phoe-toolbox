@@ -39,7 +39,7 @@ PRINT-UNREADABLE-OBJECT."
   "Like WITH-OPEN-FILE, except with defaults suitable for reading from binary."
   `(with-open-file (,stream ,filespec :direction :input
                                       :if-does-not-exist :error
-                                      :element-type 'octet)
+                                      :element-type '(unsigned-byte 8))
      ,@body))
 
 (defmacro with-output-to-binary ((stream filespec) &body body)
@@ -47,7 +47,7 @@ PRINT-UNREADABLE-OBJECT."
   `(with-open-file (,stream ,filespec :direction :output
                                       :if-exists :supersede
                                       :if-does-not-exist :create
-                                      :element-type 'octet)
+                                      :element-type '(unsigned-byte 8))
      ,@body))
 
 (defmacro wait ((&optional (timeout 2) (step 0.01)) &body body)
@@ -155,7 +155,7 @@ not found."
     (if foundp value
         (error "RASSOC of ~A was not found in ~A." key alist))))
 
-(defun assoc-value-or-die (alist key &key (test ''eql))
+(defun assoc-value-or-die (alist key &key (test 'eql))
   "Like ALEXANDRIA:ASSOC-VALUE, except it signals an error if the value is
 not found."
   (multiple-value-bind (value foundp)
