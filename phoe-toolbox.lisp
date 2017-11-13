@@ -6,6 +6,11 @@
 (in-package #:phoe-toolbox)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Indentation
+
+(trivial-indent:define-indentation uiop:define-package (4 2 &rest))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Macros
 
 (defmacro define-constructor ((class . keys) &body body)

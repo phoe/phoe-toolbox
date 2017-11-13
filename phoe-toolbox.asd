@@ -6,6 +6,7 @@
   :license "BSD 2-clause"
   :serial t
   :depends-on (#:alexandria
+               #:trivial-indent
                #:closer-mop)
   :components ((:file "package")
                (:file "phoe-toolbox")))
