@@ -47,11 +47,13 @@ PRINT-UNREADABLE-OBJECT."
                                       :element-type '(unsigned-byte 8))
      ,@body))
 
-(defmacro with-output-to-binary ((stream filespec) &body body)
+(defmacro with-output-to-binary ((stream filespec
+                                  &key (if-does-not-exist :create))
+                                 &body body)
   "Like WITH-OPEN-FILE, except with defaults suitable for wriiting to binary."
   `(with-open-file (,stream ,filespec :direction :output
                                       :if-exists :supersede
-                                      :if-does-not-exist :create
+                                      :if-does-not-exist ,if-does-not-exist
                                       :element-type '(unsigned-byte 8))
      ,@body))
 
