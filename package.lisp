@@ -39,4 +39,6 @@
    #:unintern-all-symbols
    #:whitespacep
    #:print-instance-readably
-   #:multiple-value-mapcar))
+   #:multiple-value-mapcar
+   #:urls-pathnames
+   #:url-filename))

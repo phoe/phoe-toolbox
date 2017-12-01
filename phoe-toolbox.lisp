@@ -329,4 +329,19 @@ applying FUNCTION to consecutive arguments from LISTS."
     (loop for vl in values
           do (loop for i from 0 below max-values
                    do (push (nth i vl) (nth i lists))))
-    (values-list (mapcar #'nreverse lists))))
+    (values-list (mapcar #'nreverse ))))
+
+(defun urls-pathnames (urls directory)
+  "Provided a list of URLs and a valid directory pathname, returns a list of
+pathnames that end with the filenames suitable for downloaded files."
+  (let* ((filenames (mapcar #'url-filename urls))
+         (pathnames (mapcar (rcurry #'merge-pathnames directory) filenames)))
+    pathnames))
+
+(defun url-filename (url)
+  "Given a URL, returns everything after its last slash."
+  (assert (stringp url))
+  (let* ((position (position #\/ url :from-end t)))
+    (if position
+        (subseq url (1+ position))
+        "")))
