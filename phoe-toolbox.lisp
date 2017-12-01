@@ -256,10 +256,6 @@ is replaced with replacement."
             (nth 5 time) (nth 4 time) (nth 3 time)
             (nth 2 time) (nth 1 time) (nth 0 time))))
 
-(defun keywordize (string)
-  "Given a string, upcases it returns a keyword with the upcased name."
-  (intern (string-upcase string) :keyword))
-
 (defun string=-getf (plist indicator)
   "Like GETF, except it tests with STRING= and is there suitable for use
 with strings and symbols."
@@ -296,10 +292,11 @@ uninterned. The tree must not contain improper lists."
 
 (defun print-instance-readably (object &optional (stream *standard-output*))
   "Prints an instance readably using the #. notation with MAKE-INSTANCE.
+\
 This function is a hack. Its functioning depends on all direct slots of a class
 being of form %FOO or FOO and having an initarg keyword called :FOO. All values
 stored in these slots need to be printable readably. Moreover, indirect slots
-are not restored."
+are not restored. Before you use it, make sure you know what you are doing."
   (check-type object standard-object)
   (flet ((internal-slot-keyword (symbol)
            (let* ((string (string symbol))
