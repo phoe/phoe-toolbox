@@ -38,4 +38,5 @@
    #:peek-char-no-hang
    #:unintern-all-symbols
    #:whitespacep
-   #:print-instance-readably))
+   #:print-instance-readably
+   #:multiple-value-mapcar))

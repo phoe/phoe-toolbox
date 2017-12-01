@@ -315,3 +315,18 @@ are not restored."
       (with-standard-io-syntax
         (let ((*print-pretty* t))
           (format stream "#.~S" result))))))
+
+(defun multiple-value-mapcar (function &rest lists)
+  "Returns multiple lists of all multiple values returned by repeatedly
+applying FUNCTION to consecutive arguments from LISTS."
+  (assert (not (null lists)))
+  (let* ((values (loop for l = lists then (mapcar #'cdr l)
+                       until (some #'endp l)
+                       collecting (multiple-value-list
+                                   (apply function (mapcar #'car l)))))
+         (max-values (loop for vl in values maximizing (length vl)))
+         (lists (make-list max-values)))
+    (loop for vl in values
+          do (loop for i from 0 below max-values
+                   do (push (nth i vl) (nth i lists))))
+    (values-list (mapcar #'nreverse lists))))
