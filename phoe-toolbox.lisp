@@ -343,12 +343,12 @@ pathnames that end with the filenames suitable for downloaded files."
         (subseq url (1+ position))
         "")))
 
-(defun class-all-subclasses (c)
+(defun class-all-subclasses (class)
   "Returns all subclasses, direct and indirect, of the provided class."
-  (let ((result '()))
+  (let ((result (make-hash-table)))
     (labels ((recurse (class)
-               (unless (find class result)
-                 (push class result)
+               (unless (gethash class result)
+                 (setf (gethash class result) result)
                  (mapc #'recurse (c2mop:class-direct-subclasses class)))))
-      (recurse c)
-      result)))
+      (recurse class)
+      (hash-table-keys result))))
