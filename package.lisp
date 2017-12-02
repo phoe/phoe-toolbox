@@ -41,5 +41,4 @@
    #:print-instance-readably
    #:multiple-value-mapcar
    #:urls-pathnames
-   #:url-filename
-   #:class-all-subclasses))
+   #:url-filename))
