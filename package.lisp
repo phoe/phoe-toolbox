@@ -14,6 +14,7 @@
    #:wait-until
    #:finalized-let*
    #:with-temp-package
+   #:check-boundp
    ;; Functions
    #:count-digits
    #:cat
