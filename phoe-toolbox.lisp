@@ -333,7 +333,7 @@ applying FUNCTION to consecutive arguments from LISTS."
     (loop for vl in values
           do (loop for i from 0 below max-values
                    do (push (nth i vl) (nth i lists))))
-    (values-list (mapcar #'nreverse ))))
+    (values-list (mapcar #'nreverse lists))))
 
 (defun urls-pathnames (urls directory)
   "Provided a list of URLs and a valid directory pathname, returns a list of
