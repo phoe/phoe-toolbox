@@ -349,3 +349,11 @@ pathnames that end with the filenames suitable for downloaded files."
     (if position
         (subseq url (1+ position))
         "")))
+
+(defun dsubseq (sequence start &optional end)
+  "Like SUBSEQ, except the created array is an array displaced to SEQUENCE ~
+and therefore shares structure with it."
+  (unless end
+    (setf end (array-total-size sequence)))
+  (make-array (- end start) :displaced-to sequence
+                            :displaced-index-offset start))

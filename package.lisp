@@ -42,4 +42,5 @@
    #:print-instance-readably
    #:multiple-value-mapcar
    #:urls-pathnames
-   #:url-filename))
+   #:url-filename
+   #:dsubseq))
