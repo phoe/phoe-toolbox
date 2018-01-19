@@ -43,4 +43,5 @@
    #:multiple-value-mapcar
    #:urls-pathnames
    #:url-filename
-   #:dsubseq))
+   #:dsubseq
+   #:gethash-or-die))
