@@ -172,16 +172,14 @@ not found."
 (defun assoc-value-or-die (alist key &key (test 'eql))
   "Like ALEXANDRIA:ASSOC-VALUE, except it signals an error if the value is
 not found."
-  (multiple-value-bind (value foundp)
-      (assoc-value alist key :test test)
+  (multiple-value-bind (value foundp) (assoc-value alist key :test test)
     (if foundp value
         (error "ASSOC of ~A was not found in ~A." key alist))))
 
 (defun gethash-or-die (key hash-table &optional default)
   "Like ALEXANDRIA:ASSOC-VALUE, except it signals an error if the value is
 not found."
-  (multiple-value-bind (value foundp)
-      (gethash key hash-table default)
+  (multiple-value-bind (value foundp) (gethash key hash-table default)
     (if foundp value
         (error "GETHASH of ~A was not found in ~A." key hash-table))))
 
@@ -190,11 +188,12 @@ not found."
   "Prints a hash table readably using ALEXANDRIA:ALIST-HASH-TABLE."
   (let ((test (hash-table-test hash-table))
         (*print-circle* t)
-        (*print-readably* t))
+        (*print-readably* t)
+        (alist (hash-table-alist hash-table)))
     (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE~%")
-    (format stream "'~S~%" (hash-table-alist hash-table))
+    (format stream "'~S~%" alist)
     (format stream "  :TEST '~A)" test)
-    nil))
+    hash-table))
 
 (defun read-data-file (system pathname)
   "Reads the data file from the provided pathname. The pathname should be
