@@ -44,4 +44,5 @@
    #:urls-pathnames
    #:url-filename
    #:dsubseq
-   #:gethash-or-die))
+   #:gethash-or-die
+   #:nth-funcall))

@@ -364,3 +364,9 @@ and therefore shares structure with it."
     (setf end (array-total-size sequence)))
   (make-array (- end start) :displaced-to sequence
                             :displaced-index-offset start))
+
+(defun nth-funcall (function count argument)
+  "Funcall FUNCTION composed COUNT times with itself on ARGUMENT."
+  (loop repeat count
+        for result = argument then (funcall function result)
+        finally (return result)))
