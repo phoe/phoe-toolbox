@@ -45,4 +45,6 @@
    #:url-filename
    #:dsubseq
    #:gethash-or-die
-   #:nth-funcall))
+   #:nth-funcall
+   #:mod-incf
+   #:mod-decf))

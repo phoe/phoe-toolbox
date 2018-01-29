@@ -370,3 +370,17 @@ and therefore shares structure with it."
   (loop repeat (1+ count)
         for result = argument then (funcall function result)
         finally (return result)))
+
+(defmacro mod-incf (place divisor &optional (delta 1))
+  "Like INCF, except the final value set in PLACE is always a modulus modulo
+DIVISOR."
+  (with-gensyms (value)
+    `(let ((,value ,place))
+       (setf ,place (mod (+ ,value ,delta) ,modulus)))))
+
+(defmacro mod-decf (place modulus &optional (delta 1))
+  "Like DECF, except the final value set in PLACE is always a modulus modulo
+DIVISOR."
+  (with-gensyms (value)
+    `(let ((,value ,place))
+       (setf ,place (mod (- ,value ,delta) ,modulus)))))
