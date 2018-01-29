@@ -367,6 +367,6 @@ and therefore shares structure with it."
 
 (defun nth-funcall (function count argument)
   "Funcall FUNCTION composed COUNT times with itself on ARGUMENT."
-  (loop repeat count
+  (loop repeat (1+ count)
         for result = argument then (funcall function result)
         finally (return result)))
