@@ -47,4 +47,5 @@
    #:gethash-or-die
    #:nth-funcall
    #:mod-incf
-   #:mod-decf))
+   #:mod-decf
+   #:negatef))
