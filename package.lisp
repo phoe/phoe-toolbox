@@ -48,4 +48,4 @@
    #:nth-funcall
    #:mod-incf
    #:mod-decf
-   #:negatef))
+   #:notf))
