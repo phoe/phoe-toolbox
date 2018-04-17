@@ -122,9 +122,10 @@ were interned into it during that time."
 
 (defun count-digits (integer)
   "Returns the number of digits in an integer, sans any sign."
+  (check-type integer integer)
   (if (= 0 integer)
       1
-      (values (ceiling (log (abs integer) 10)))))
+      (values (ceiling (log (1+ (abs integer)) 10)))))
 
 (defun cat (&rest strings)
   "Concatenates targets into a string."
