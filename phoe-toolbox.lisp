@@ -119,11 +119,16 @@ were interned into it during that time."
 
 (defmacro fbind (bindings &body body)
   "Binds the function objects in the function namespace."
-  `(flet ,(loop with gensym = (gensym)
-                for (name function) in bindings
-                collect `(,name (&rest ,gensym)
-                                (apply ,function ,gensym)))
-     ,@body))
+  (loop for (name function) in bindings
+        for let-gensym = (gensym)
+        for arg-gensym = (gensym)
+        collect `(,let-gensym ,function)
+          into let-bindings
+        collect `(,name (&rest ,arg-gensym) (apply ,let-gensym ,arg-gensym))
+          into flet-bindings
+        finally (return `(let ,let-bindings
+                           (flet ,flet-bindings
+                             ,@body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Functions
