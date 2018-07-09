@@ -126,8 +126,11 @@ were interned into it during that time."
           into let-bindings
         collect `(,name (&rest ,arg-gensym) (apply ,let-gensym ,arg-gensym))
           into flet-bindings
+        collect name
+          into declare-names
         finally (return `(let ,let-bindings
                            (flet ,flet-bindings
+                             (declare (inline ,@declare-names))
                              ,@body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
