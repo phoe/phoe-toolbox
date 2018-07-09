@@ -15,6 +15,7 @@
    #:finalized-let*
    #:with-temp-package
    #:check-boundp
+   #:fbind
    ;; Functions
    #:count-digits
    #:cat

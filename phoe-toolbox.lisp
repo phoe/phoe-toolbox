@@ -117,6 +117,14 @@ were interned into it during that time."
     `(unless (slot-boundp ,object ',slot-name)
        (error "Must provide ~A." ,result))))
 
+(defmacro fbind (bindings &body body)
+  "Binds the function objects in the function namespace."
+  `(flet ,(loop with gensym = (gensym)
+                for (name function) in bindings
+                collect `(,name (&rest ,gensym)
+                                (apply ,function ,gensym)))
+     ,@body))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Functions
 
