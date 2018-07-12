@@ -47,6 +47,7 @@
    #:dsubseq
    #:gethash-or-die
    #:nth-funcall
+   #:graph-roots
    #:circular-graph-p
    ;; Modify macros
    #:mod-incf

@@ -388,22 +388,25 @@ and therefore shares structure with it."
         for result = argument then (funcall function result)
         finally (return result)))
 
+(defun graph-roots (edges)
+  "Accepts a list of directed edges (two-element lists of EQL-comparable nodes).
+Returns a list of root vertices (vertices that are not pointed at)."
+  (let* ((vertices (remove-duplicates (mapcar #'first edges)))
+         (starts (mapcar (rcurry #'cons t) vertices)))
+    (loop with hash-table = (alist-hash-table starts)
+          for end in (mapcar #'second edges)
+          do (remhash end hash-table)
+          finally (return (hash-table-keys hash-table)))))
+
 (defun circular-graph-p (edges)
   "Accepts a list of directed edges (two-element lists of EQL-comparable nodes).
 If the graph does not contain a cycle, returns (VALUES NIL NIL). If the graph
 contains a cycle, returns (VALUES T VERTEX), where VERTEX is one of the vertices
 in the cycle."
   (flet ((die (vertex) (return-from circular-graph-p (values t vertex))))
-    (let* ((vertices (remove-duplicates (mapcar #'first edges)))
-           (starts (mapcar (rcurry #'cons t) vertices))
-           (stack (loop with hash-table = (alist-hash-table starts)
-                        for end in (mapcar #'second edges)
-                        do (remhash end hash-table)
-                        finally (let ((keys (hash-table-keys hash-table)))
-                                  (if (null keys)
-                                      (die (first vertices))
-                                      (return keys)))))
+    (let* ((stack (graph-roots edges))
            (visited (make-hash-table)))
+      (when (null stack) (die (caar edges)))
       (do ((vertex (pop stack) (pop stack)))
           ((and (null vertex) (null stack)))
         (when (gethash vertex visited) (die vertex))
