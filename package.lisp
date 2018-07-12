@@ -47,6 +47,8 @@
    #:dsubseq
    #:gethash-or-die
    #:nth-funcall
+   #:circular-graph-p
+   ;; Modify macros
    #:mod-incf
    #:mod-decf
    #:notf))
