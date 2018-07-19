@@ -372,6 +372,13 @@ and therefore shares structure with it."
         for result = argument then (funcall function result)
         finally (return result)))
 
+(defun constantly* (&rest args)
+  "Like CONSTANTLY, except the returned closure may return multiple values,
+denoted by ARGS."
+  (lambda (&rest lambda-args)
+    (declare (ignore lambda-args))
+    (values-list args)))
+
 ;; The following implementations of MOD-INCF and MOD-DECF have been adapted from
 ;; SICL by Robert Strandh and are subject to the following license:
 

@@ -46,6 +46,7 @@
    #:dsubseq
    #:gethash-or-die
    #:nth-funcall
+   #:constantly*
    #:mod-incf
    #:mod-decf
    #:notf))
