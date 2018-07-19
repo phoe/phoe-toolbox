@@ -15,6 +15,7 @@
    #:finalized-let*
    #:with-temp-package
    #:check-boundp
+   #:fbind
    ;; Functions
    #:count-digits
    #:cat
@@ -47,6 +48,9 @@
    #:gethash-or-die
    #:nth-funcall
    #:constantly*
+   #:graph-roots
+   #:circular-graph-p
+   ;; Modify macros
    #:mod-incf
    #:mod-decf
    #:notf))

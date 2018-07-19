@@ -117,6 +117,22 @@ were interned into it during that time."
     `(unless (slot-boundp ,object ',slot-name)
        (error "Must provide ~A." ,result))))
 
+(defmacro fbind (bindings &body body)
+  "Binds the function objects in the function namespace."
+  (loop for (name function) in bindings
+        for let-gensym = (gensym)
+        for arg-gensym = (gensym)
+        collect `(,let-gensym ,function)
+          into let-bindings
+        collect `(,name (&rest ,arg-gensym) (apply ,let-gensym ,arg-gensym))
+          into flet-bindings
+        collect name
+          into declare-names
+        finally (return `(let ,let-bindings
+                           (flet ,flet-bindings
+                             (declare (inline ,@declare-names))
+                             ,@body)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Functions
 
@@ -378,6 +394,33 @@ denoted by ARGS."
   (lambda (&rest lambda-args)
     (declare (ignore lambda-args))
     (values-list args)))
+
+(defun graph-roots (edges)
+  "Accepts a list of directed edges (two-element lists of EQL-comparable nodes).
+Returns a list of root vertices (vertices that are not pointed at)."
+  (let* ((vertices (remove-duplicates (mapcar #'first edges)))
+         (starts (mapcar (rcurry #'cons t) vertices)))
+    (loop with hash-table = (alist-hash-table starts)
+          for end in (mapcar #'second edges)
+          do (remhash end hash-table)
+          finally (return (hash-table-keys hash-table)))))
+
+(defun circular-graph-p (edges)
+  "Accepts a list of directed edges (two-element lists of EQL-comparable nodes).
+If the graph does not contain a cycle, returns (VALUES NIL NIL). If the graph
+contains a cycle, returns (VALUES T VERTEX), where VERTEX is one of the vertices
+in the cycle."
+  (flet ((die (vertex) (return-from circular-graph-p (values t vertex))))
+    (let* ((stack (graph-roots edges))
+           (visited (make-hash-table)))
+      (when (null stack) (die (caar edges)))
+      (do ((vertex (pop stack) (pop stack)))
+          ((and (null vertex) (null stack)))
+        (when (gethash vertex visited) (die vertex))
+        (setf (gethash vertex visited) t)
+        (let ((new (remove-if-not (curry #'eq vertex) edges :key #'first)))
+          (unionf stack (mapcar #'second new))))
+      (values nil nil))))
 
 ;; The following implementations of MOD-INCF and MOD-DECF have been adapted from
 ;; SICL by Robert Strandh and are subject to the following license:
