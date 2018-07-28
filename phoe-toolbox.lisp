@@ -133,6 +133,29 @@ were interned into it during that time."
                              (declare (inline ,@declare-names))
                              ,@body)))))
 
+(defmacro signals* (condition-type n form)
+  "Testing macro analogous to 1AM:SIGNALS, except it does not perform a
+non-local transfer of control and therefore is not suitable for any code that
+makes calls to INVOKE-DEBUGGER. Instead, it allows the caller to assert that
+a condition of type CONDITION-TYPE was signaled exactly N times."
+  (check-type condition-type symbol)
+  (check-type n (integer 1))
+  (with-gensyms (count handler failer)
+    (let ((error-msg-1 "Expected to signal ~A, but ~S was signaled instead.")
+          (error-msg-2 "Expected to signal ~A, but got nothing.")
+          (error-msg-3 "Expected to signal ~A once, but got it ~D times."))
+      `(let* ((,count 0)
+              (,failer (lambda (e) (error ,error-msg-1 ',condition-type e)))
+              (,handler (lambda (e) (declare (ignore e)) (incf ,count))))
+         (multiple-value-prog1
+             (handler-bind ((,condition-type ,handler)
+                            ((and condition (not ,condition-type)) ,failer))
+               ,form)
+           (when (= 0 ,count)
+             (error ,error-msg-2 ',condition-type))
+           (unless (= 1 ,n)
+             (error ,error-msg-3 ',condition-type ,count)))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Functions
 

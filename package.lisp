@@ -16,6 +16,7 @@
    #:with-temp-package
    #:check-boundp
    #:fbind
+   #:signals*
    ;; Functions
    #:count-digits
    #:cat
