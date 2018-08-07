@@ -418,6 +418,10 @@ denoted by ARGS."
     (declare (ignore lambda-args))
     (values-list args)))
 
+(defun identity* (&rest args)
+  "Like CONSTANTLY, except the list of ARGS is returned instead."
+  args)
+
 (defun graph-roots (edges)
   "Accepts a list of directed edges (two-element lists of EQL-comparable nodes).
 Returns a list of root vertices (vertices that are not pointed at)."

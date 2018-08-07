@@ -49,6 +49,7 @@
    #:gethash-or-die
    #:nth-funcall
    #:constantly*
+   #:identity*
    #:graph-roots
    #:circular-graph-p
    ;; Modify macros
