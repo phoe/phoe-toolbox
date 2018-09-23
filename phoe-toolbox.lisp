@@ -324,9 +324,9 @@ with strings and symbols."
 available for reading on the input stream."
   (let ((character (read-char-no-hang input-stream eof-error-p
                                       eof-value recursive-p)))
-    (when character
-      (unread-char character input-stream)
-      character)))
+    (unless (eql character eof-value)
+      (unread-char character input-stream))
+    character))
 
 (defun unintern-all-symbols (tree)
   "Returns a copy of the provided tree, in which all symbols have been
