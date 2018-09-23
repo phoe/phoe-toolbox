@@ -324,7 +324,7 @@ with strings and symbols."
 available for reading on the input stream."
   (let ((character (read-char-no-hang input-stream eof-error-p
                                       eof-value recursive-p)))
-    (unless (eql character eof-value)
+    (unless (and character (eql character eof-value))
       (unread-char character input-stream))
     character))
 
