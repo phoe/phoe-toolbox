@@ -57,7 +57,7 @@ PRINT-UNREADABLE-OBJECT."
                                       :element-type '(unsigned-byte 8))
      ,@body))
 
-(defmacro wait ((&optional (timeout 2) (step 0.01)) &body body)
+(defmacro wait ((&optional (timeout 1) (step 0.001)) &body body)
   "Evaluates BODY each STEP seconds until it evaluates to true, at which point
 it returns the value of BODY, or until TIMEOUT seconds pass, at which point it
 returns NIL."
