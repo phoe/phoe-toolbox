@@ -52,6 +52,7 @@
    #:identity*
    #:graph-roots
    #:circular-graph-p
+   #:split
    ;; Modify macros
    #:mod-incf
    #:mod-decf

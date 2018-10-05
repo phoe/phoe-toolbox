@@ -449,6 +449,16 @@ in the cycle."
           (unionf stack (mapcar #'second new))))
       (values nil nil))))
 
+(defun split (predicate list)
+  "Separates the list into a sublist of elements for which the predicate returns
+true and a sublist of elements for which the predicate returns false. Returns
+them as two values."
+  (loop for elt in list
+        if (funcall predicate elt)
+          collect elt into true
+        else collect elt into false
+        finally (return (values true false))))
+
 ;; The following implementations of MOD-INCF and MOD-DECF have been adapted from
 ;; SICL by Robert Strandh and are subject to the following license:
 
