@@ -42,7 +42,3 @@
 (defun bag-compress (bag)
   (adjust-array (bag-contents bag) (bag-count bag))
   (values))
-
-(defun make-bags (&rest symbols)
-  (assert (every #'symbolp symbols))
-  (alist-hash-table (mapcar (lambda (x) (cons x (make-bag))) symbols)))
