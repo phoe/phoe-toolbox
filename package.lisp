@@ -53,6 +53,7 @@
    #:graph-roots
    #:circular-graph-p
    #:split
+   #:make-dumped-stream
    ;; Modify macros
    #:mod-incf
    #:mod-decf

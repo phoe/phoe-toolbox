@@ -459,6 +459,15 @@ them as two values."
         else collect elt into false
         finally (return (values true false))))
 
+(defun make-dumped-stream
+    (input-output-stream dump-input-stream dump-output-stream)
+  "Returns a wrapper around the stream. All data read from the stream is
+additionally sent to DUMP-INPUT-STREAM. All data written to the stream is
+additionally sent to the DUMP-OUTPUT-STREAM."
+  (make-two-way-stream
+   (make-echo-streams input-output-stream dump-input-stream)
+   (make-broadcast-stream input-output-stream dump-output-stream)))
+
 ;; The following implementations of MOD-INCF and MOD-DECF have been adapted from
 ;; SICL by Robert Strandh and are subject to the following license:
 
