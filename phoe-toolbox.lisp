@@ -461,9 +461,9 @@ them as two values."
 
 (defun make-dumped-stream
     (input-output-stream &key dump-input-stream dump-output-stream)
-  "Returns a wrapper around the stream. All data read from the stream is
-additionally sent to DUMP-INPUT-STREAM. All data written to the stream is
-additionally sent to the DUMP-OUTPUT-STREAM."
+  "Returns a wrapper stream around the original stream. All data read from the
+wrapper stream is additionally sent to DUMP-INPUT-STREAM. All data written to
+the wrapper stream is additionally sent to the DUMP-OUTPUT-STREAM."
   (if (or dump-input-stream dump-output-stream)
       (make-two-way-stream
        (if dump-input-stream
