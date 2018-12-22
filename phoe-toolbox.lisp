@@ -228,11 +228,10 @@ not found."
   "Prints a hash table readably using ALEXANDRIA:ALIST-HASH-TABLE."
   (let ((test (hash-table-test hash-table))
         (*print-circle* t)
-        (*print-readably* t)
-        (alist (hash-table-alist hash-table)))
-    (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE~%")
-    (format stream "'~S~%" alist)
-    (format stream "  :TEST '~A)" test)
+        (*print-readably* t))
+    (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE '(~%")
+    (maphash (lambda (k v) (format stream "   (~S . ~S)~%" k v)) hash-table)
+    (format stream "   ) :TEST '~A)" test)
     hash-table))
 
 (defun read-data-file (system pathname)
