@@ -16,4 +16,5 @@
   :author "Michał \"phoe\" Herda <phoe@teknik.io>"
   :license "BSD 2-clause"
   :serial t
+  :depends-on (#:alexandria)
   :components ((:file "bag")))
