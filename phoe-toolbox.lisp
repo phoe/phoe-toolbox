@@ -217,8 +217,7 @@ not found."
         (error "ASSOC of ~A was not found in ~A." key alist))))
 
 (defun gethash-or-die (key hash-table &optional default)
-  "Like ALEXANDRIA:ASSOC-VALUE, except it signals an error if the value is
-not found."
+  "Like GETHASH, except it signals an error if the value is not found."
   (multiple-value-bind (value foundp) (gethash key hash-table default)
     (if foundp value
         (error "GETHASH of ~A was not found in ~A." key hash-table))))
