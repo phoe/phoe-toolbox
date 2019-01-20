@@ -207,20 +207,20 @@ not found."
   (multiple-value-bind (value foundp)
       (rassoc-value alist key :test test)
     (if foundp value
-        (error "RASSOC of ~A was not found in ~A." key alist))))
+        (error "RASSOC of ~S was not found in ~S." key alist))))
 
 (defun assoc-value-or-die (alist key &key (test 'eql))
   "Like ALEXANDRIA:ASSOC-VALUE, except it signals an error if the value is
 not found."
   (multiple-value-bind (value foundp) (assoc-value alist key :test test)
     (if foundp value
-        (error "ASSOC of ~A was not found in ~A." key alist))))
+        (error "ASSOC of ~S was not found in ~S." key alist))))
 
 (defun gethash-or-die (key hash-table &optional default)
   "Like GETHASH, except it signals an error if the value is not found."
   (multiple-value-bind (value foundp) (gethash key hash-table default)
     (if foundp value
-        (error "GETHASH of ~A was not found in ~A." key hash-table))))
+        (error "GETHASH of ~S was not found in ~S." key hash-table))))
 
 (defun print-hash-table-readably (hash-table
                                   &optional (stream *standard-output*))
