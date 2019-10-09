@@ -250,11 +250,14 @@ gracefully."
          (end (max 0 start (min length (or end length)))))
     (subseq sequence start end)))
 
+(defvar *whitespace*
+  '(#\Space #\Newline #\Backspace #\Tab
+    #\Linefeed #\Page #\Return #\Rubout)
+  "Whitespace characters.")
+
 (defun trim-whitespace (string)
   "Trims whitespace characters from both sides of a string."
-  (let ((whitespace '(#\Space #\Newline #\Backspace #\Tab
-                      #\Linefeed #\Page #\Return #\Rubout)))
-    (string-trim whitespace string)))
+  (string-trim *whitespace* string))
 
 (defun hexadecimal-string-p (string)
   "Returns true if the string contains only digits 0-9 and lowercase/uppercase

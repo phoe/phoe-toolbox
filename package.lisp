@@ -29,6 +29,7 @@
    #:print-hash-table-readably
    #:read-data-file
    #:robust-subseq
+   #:*whitespace*
    #:trim-whitespace
    #:hexadecimal-string-p
    #:sleepcar
