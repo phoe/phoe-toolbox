@@ -294,14 +294,17 @@ is replaced with replacement."
           when pos do (write-string replacement out)
             while pos)))
 
+(defconstant +universal-unix-time-difference+ 2208988800
+  "The difference between universal time and Unix time in seconds.")
+
 (defun get-unix-time ()
   "Returns the current Unix timestamp."
-  (- (get-universal-time) 2208988800))
+  (- (get-universal-time) +universal-unix-time-difference+))
 
 (defun unix-time-to-datestring (unix-time)
   "Decodes the unix time and returns its textual form in format
 \"YYYY-MM-DD HH:MM:SS\"."
-  (let* ((universal-time (+ unix-time 2208988800))
+  (let* ((universal-time (+ unix-time +universal-unix-time-difference+))
          (time (multiple-value-list (decode-universal-time universal-time))))
     (format nil "~4,'0D-~2,'0D-~2,'0D ~2,'0D:~2,'0D:~2,'0D"
             (nth 5 time) (nth 4 time) (nth 3 time)

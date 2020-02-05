@@ -4,6 +4,8 @@
   (:use #:cl
         #:alexandria)
   (:export
+   ;; Constants
+   #:+universal-unix-time-difference+
    ;; Macros
    #:define-constructor
    #:define-print
