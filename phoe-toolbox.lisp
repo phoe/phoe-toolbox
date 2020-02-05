@@ -181,7 +181,7 @@ them."
   "Collects a list of lists, where the first list contains the first element of
 the argument lists, the second list - second, etc.. The lists are as long as the
 shortest list."
-  (apply (curry #'mapcar #'list) lists))
+  (apply #'mapcar #'list lists))
 
 (defun bound-slots-values (instance)
   "Given a generalized instance of STANDARD-OBJECT, returns a list of all slot
