@@ -341,8 +341,7 @@ uninterned. The tree must not contain improper lists."
 (defun whitespacep (char)
   "Returns true if the provided character is whitespace."
   (check-type char character)
-  (member char '(#\Space #\Newline #\Backspace #\Tab
-                 #\Linefeed #\Page #\Return #\Rubout)))
+  (member char *whitespace*))
 
 (defgeneric print-instance-readably (object &optional stream)
   (:documentation
