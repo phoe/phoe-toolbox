@@ -263,8 +263,7 @@ characters #\A-#\F, false otherwise."
                  #\a #\b #\c #\d #\e #\f
                  #\A #\B #\C #\D #\E #\F)))
     (loop for char across string
-          unless (member char chars) return nil
-            finally (return t))))
+          always (member char chars))))
 
 (defun sleepcar (function list &optional (n 100) (sleep-interval 1))
   "Collects the element of funcalling FUNCTION on successive elements of LIST,
