@@ -55,6 +55,7 @@
    #:circular-graph-p
    #:split
    #:make-dumped-stream
+   #:alternatingly
    ;; Modify macros
    #:mod-incf
    #:mod-decf

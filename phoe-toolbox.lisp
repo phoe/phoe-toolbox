@@ -475,6 +475,18 @@ the wrapper stream is additionally sent to the DUMP-OUTPUT-STREAM."
            input-output-stream))
       input-output-stream))
 
+(defun alternatingly (value-when-true &optional
+                                        (value-when-false nil)
+                                        (initially-true-p nil))
+  "Returns a function that acts like CL:CONSTANTLY, but its return value
+alternates between VALUE-WHEN-TRUE and VALUE-WHEN-FALSE (default NIL).
+INITIALLY-TRUE-P specifies whether VALUE-WHEN-TRUE is returned as the first
+value from the returned function."
+  (let ((x (not initially-true-p)))
+    (lambda (&rest rest)
+      (declare (ignore rest))
+      (if (notf x) value-when-true value-when-false))))
+
 ;; The following implementations of MOD-INCF and MOD-DECF have been adapted from
 ;; SICL by Robert Strandh and are subject to the following license:
 
