@@ -250,7 +250,7 @@ gracefully."
 (defvar *whitespace*
   '(#\Space #\Newline #\Backspace #\Tab
     #\Linefeed #\Page #\Return #\Rubout)
-  "Whitespace characters.")
+  "Standard whitespace characters.")
 
 (defun trim-whitespace (string)
   "Trims whitespace characters from both sides of a string."
