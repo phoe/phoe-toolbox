@@ -222,14 +222,6 @@ not found."
     (if foundp value
         (error "GETHASH of ~S was not found in ~S." key hash-table))))
 
-(defun print-hash-table-readably (hash-table
-                                  &optional (stream *standard-output*))
-  "Prints a hash table readably.
-\
-Deprecated: please use (PRINT-INSTANCE-READABLY HASH-TABLE &OPTIONAL STREAM)
-instead."
-  (print-instance-readably hash-table stream))
-
 (defun read-data-file (system pathname)
   "Reads the data file from the provided pathname. The pathname should be
 a system relative pathname."
@@ -381,6 +373,14 @@ method is not enough to print the object they have.")
       (maphash (lambda (k v) (format stream "   (~S . ~S)~%" k v)) hash-table)
       (format stream "   ) :TEST '~S)" test)
       hash-table)))
+
+(defun print-hash-table-readably (hash-table
+                                  &optional (stream *standard-output*))
+  "Prints a hash table readably.
+\
+Deprecated: please use (PRINT-INSTANCE-READABLY HASH-TABLE &OPTIONAL STREAM)
+instead."
+  (print-instance-readably hash-table stream))
 
 (defun multiple-value-mapcar (function &rest lists)
   "Returns multiple lists of all multiple values returned by repeatedly
