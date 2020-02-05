@@ -230,7 +230,7 @@ not found."
         (*print-readably* t))
     (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE '(~%")
     (maphash (lambda (k v) (format stream "   (~S . ~S)~%" k v)) hash-table)
-    (format stream "   ) :TEST '~A)" test)
+    (format stream "   ) :TEST '~S)" test)
     hash-table))
 
 (defun read-data-file (system pathname)
