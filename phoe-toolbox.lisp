@@ -183,7 +183,7 @@ the argument lists, the second list - second, etc.. The lists are as long as the
 shortest list."
   (apply #'mapcar #'list lists))
 
-(defun bound-slots-values (instance)
+(defun bound-slot-names (instance)
   "Given a generalized instance of STANDARD-OBJECT, returns a list of all slot
 names which are bound in that instance."
   (check-type instance standard-object)
