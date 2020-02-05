@@ -224,14 +224,11 @@ not found."
 
 (defun print-hash-table-readably (hash-table
                                   &optional (stream *standard-output*))
-  "Prints a hash table readably using ALEXANDRIA:ALIST-HASH-TABLE."
-  (let ((test (hash-table-test hash-table))
-        (*print-circle* t)
-        (*print-readably* t))
-    (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE '(~%")
-    (maphash (lambda (k v) (format stream "   (~S . ~S)~%" k v)) hash-table)
-    (format stream "   ) :TEST '~S)" test)
-    hash-table))
+  "Prints a hash table readably.
+\
+Deprecated: please use (PRINT-INSTANCE-READABLY HASH-TABLE &OPTIONAL STREAM)
+instead."
+  (print-instance-readably hash-table stream))
 
 (defun read-data-file (system pathname)
   "Reads the data file from the provided pathname. The pathname should be
@@ -345,28 +342,44 @@ uninterned. The tree must not contain improper lists."
   (member char '(#\Space #\Newline #\Backspace #\Tab
                  #\Linefeed #\Page #\Return #\Rubout)))
 
-(defun print-instance-readably (object &optional (stream *standard-output*))
-  "Prints an instance readably using the #. notation with MAKE-INSTANCE.
+(defgeneric print-instance-readably (object &optional stream)
+  (:documentation
+   "Prints an instance readably, using the #. notation.
 \
-This function is a hack. Its functioning depends on all direct slots of a class
-being of form %FOO or FOO and having an initarg keyword called :FOO. All values
-stored in these slots need to be printable readably. Moreover, indirect slots
-are not restored. Before you use it, make sure you know what you are doing."
-  (check-type object standard-object)
-  (flet ((internal-slot-keyword (symbol)
-           (let* ((string (string symbol))
-                  (percentp (eql (aref string 0) #\%))
-                  (result (if percentp (subseq (string symbol) 1) string)))
-             (values (intern result :keyword)))))
-    (let* ((class (class-name (class-of object)))
-           (slots (bound-slots-values object))
-           (values (mapcar (curry #'slot-value object) slots))
-           (keywords (mapcar #'internal-slot-keyword slots))
-           (plist (apply #'nconc (zip keywords values)))
-           (result `(make-instance ',class ,@plist)))
-      (with-standard-io-syntax
-        (let ((*print-pretty* t))
-          (format stream "#.~S" result))))))
+The standard method is a hack. Its functioning depends on all direct slots of a
+class being of form %FOO or FOO and having an initarg keyword called :FOO. All
+values stored in these slots need to be printable readably. Moreover, indirect
+slots are not restored. Before you use it, make sure you know what you are
+doing.
+\
+The hash-table method uses ALEXANDRIA:ALIST-HASH-TABLE.
+\
+Programmers may define methods on this generic function in case the standard
+method is not enough to print the object they have.")
+  (:method (object &optional (stream *standard-output*))
+    (check-type object standard-object)
+    (flet ((internal-slot-keyword (symbol)
+             (let* ((string (string symbol))
+                    (percentp (eql (aref string 0) #\%))
+                    (result (if percentp (subseq (string symbol) 1) string)))
+               (values (intern result :keyword)))))
+      (let* ((class (class-name (class-of object)))
+             (slots (bound-slots-values object))
+             (values (mapcar (curry #'slot-value object) slots))
+             (keywords (mapcar #'internal-slot-keyword slots))
+             (plist (apply #'nconc (zip keywords values)))
+             (result `(make-instance ',class ,@plist)))
+        (with-standard-io-syntax
+          (let ((*print-pretty* t))
+            (format stream "#.~S" result))))))
+  (:method ((hash-table hash-table) &optional (stream *standard-output*))
+    (let ((test (hash-table-test hash-table))
+          (*print-circle* t)
+          (*print-readably* t))
+      (format stream "#.(ALEXANDRIA:ALIST-HASH-TABLE '(~%")
+      (maphash (lambda (k v) (format stream "   (~S . ~S)~%" k v)) hash-table)
+      (format stream "   ) :TEST '~S)" test)
+      hash-table)))
 
 (defun multiple-value-mapcar (function &rest lists)
   "Returns multiple lists of all multiple values returned by repeatedly
