@@ -14,7 +14,7 @@
    #:wait-until
    #:finalized-let*
    #:with-temp-package
-   #:check-boundp
+   #:check-slot-boundp
    #:fbind
    #:signals*
    ;; Functions
