@@ -24,7 +24,7 @@
    #:cat
    #:catn
    #:zip
-   #:bound-slots-values
+   #:bound-slot-names
    #:vector-times
    #:assoc-value-or-die
    #:rassoc-value-or-die
