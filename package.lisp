@@ -19,6 +19,11 @@
    #:check-slot-boundp
    #:fbind
    #:signals*
+   #:handler-case*
+   ;; Modify macros
+   #:mod-incf
+   #:mod-decf
+   #:notf
    ;; Functions
    #:count-digits
    #:cat
@@ -57,8 +62,4 @@
    #:circular-graph-p
    #:split
    #:make-dumped-stream
-   #:alternatingly
-   ;; Modify macros
-   #:mod-incf
-   #:mod-decf
-   #:notf))
+   #:alternatingly))

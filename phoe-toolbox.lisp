@@ -156,6 +156,37 @@ a condition of type CONDITION-TYPE was signaled exactly N times."
            (unless (= 1 ,n)
              (error ,error-msg-3 ',condition-type ,count)))))))
 
+(defmacro handler-case* (form &rest cases)
+  "A variant of HANDLER-CASE, in which the case forms are evaluating before
+performing a transfer of control. This ensures that the case forms are evaluated
+in the dynamic scope of the signaling form."
+  (let ((no-error-case-count (count :no-error cases :key #'car)))
+    (case no-error-case-count
+      (0 (make-handler-case*-without-no-error-case form cases))
+      (1 (make-handler-case*-with-no-error-case form cases))
+      (t (error "Multiple :NO-ERROR cases found in HANDLER-CASE*.")))))
+
+(defun make-handler-case*-with-no-error-case (form cases)
+  (let* ((no-error-case (assoc :no-error cases))
+         (other-cases (remove no-error-case cases)))
+    (let ((normal-return (gensym "NORMAL-RETURN"))
+          (error-return  (gensym "ERROR-RETURN")))
+      `(block ,error-return
+         (multiple-value-call (lambda ,@(cdr no-error-case))
+           (block ,normal-return
+             (return-from ,error-return
+               (handler-case* (return-from ,normal-return ,form)
+                 ,@other-cases))))))))
+
+(defun make-handler-case*-without-no-error-case (form cases)
+  (let ((block-name (gensym "HANDLER-CASE*-BLOCK")))
+    (flet ((make-handler-bind-case (case)
+             (destructuring-bind (type lambda-list . body) case
+               `(,type (lambda ,lambda-list
+                         (return-from ,block-name (locally ,@body)))))))
+      (let ((bindings (mapcar #'make-handler-bind-case cases)))
+        `(block ,block-name (handler-bind ,bindings ,form))))))
+
 (define-modify-macro notf () not
   "Sets the value of PLACE to its logical negation and returns the new value.")
 
