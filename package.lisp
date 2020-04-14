@@ -62,4 +62,6 @@
    #:circular-graph-p
    #:split
    #:make-dumped-stream
-   #:alternatingly))
+   #:alternatingly
+   #:downcase-lisp-file
+   #:upcase-lisp-file))

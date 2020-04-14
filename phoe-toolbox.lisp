@@ -596,3 +596,26 @@ value from the returned function."
     (lambda (&rest rest)
       (declare (ignore rest))
       (if (notf x) value-when-true value-when-false))))
+
+(defun case-lisp-file (pathname case-function)
+  (with-input-from-file (input pathname)
+    (with-output-to-string (output)
+      (loop for char = (read-char input nil nil)
+            while char
+            do (case char
+                 (#\;
+                  (unread-char char input)
+                  (princ (read-line input) output)
+                  (terpri output))
+                 ((#\" #\|)
+                  (unread-char char input)
+                  (print (read input) output))
+                 (t (write-char (funcall case-function char) output)))))))
+
+(defun upcase-lisp-file (pathname)
+  "Upcases a Common Lisp source file."
+  (case-lisp-file pathname #'string-upcase))
+
+(defun downcase-lisp-file (pathname)
+  "Downcases a Common Lisp source file."
+  (case-lisp-file pathname #'string-downcase))
