@@ -603,13 +603,21 @@ value from the returned function."
       (loop for char = (read-char input nil nil)
             while char
             do (case char
+                 (#\#
+                  (princ char output)
+                  (let ((next-char (read-char input)))
+                    (case next-char
+                      (#\\
+                       (princ next-char output)
+                       (princ (read-char input) output))
+                      (t (unread-char next-char input)))))
                  (#\;
                   (unread-char char input)
                   (princ (read-line input) output)
                   (terpri output))
                  ((#\" #\|)
                   (unread-char char input)
-                  (print (read input) output))
+                  (prin1 (read input) output))
                  (t (write-char (funcall case-function char) output)))))))
 
 (defun upcase-lisp-file (pathname)
