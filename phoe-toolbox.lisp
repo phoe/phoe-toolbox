@@ -622,8 +622,8 @@ value from the returned function."
 
 (defun upcase-lisp-file (pathname)
   "Upcases a Common Lisp source file."
-  (case-lisp-file pathname #'string-upcase))
+  (case-lisp-file pathname #'char-upcase))
 
 (defun downcase-lisp-file (pathname)
   "Downcases a Common Lisp source file."
-  (case-lisp-file pathname #'string-downcase))
+  (case-lisp-file pathname #'char-downcase))
