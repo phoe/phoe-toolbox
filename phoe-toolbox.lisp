@@ -628,13 +628,15 @@ value from the returned function."
   "Downcases a Common Lisp source file."
   (case-lisp-file pathname #'char-downcase))
 
-(defun shallow-copy-object (original)
+(defun shallow-copy-object (original &rest initargs)
   "Creates a shallow copy of a standard object, copying the values of all
-slots."
+slots, before calling REINITIALIZE-INSTANCE on it with the provided
+keyword-value pairs."
   (let* ((class (class-of original))
          (copy (allocate-instance class))
          (slots (c2mop:class-slots class))
          (slot-names (mapcar #'c2mop:slot-definition-name slots)))
-    (dolist (slot slot-names copy)
+    (dolist (slot slot-names)
       (when (slot-boundp original slot)
-        (setf (slot-value copy slot) (slot-value original slot))))))
+        (setf (slot-value copy slot) (slot-value original slot))))
+    (apply #'reinitialize-instance copy initargs)))
