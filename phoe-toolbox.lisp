@@ -619,3 +619,14 @@ value from the returned function."
 (defun downcase-lisp-file (pathname)
   "Downcases a Common Lisp source file."
   (case-lisp-file pathname #'string-downcase))
+
+(defun shallow-copy-object (original)
+  "Creates a shallow copy of a standard object, copying the values of all
+slots."
+  (let* ((class (class-of original))
+         (copy (allocate-instance class))
+         (slots (c2mop:class-slots class))
+         (slot-names (mapcar #'c2mop:slot-definition-name slots)))
+    (dolist (slot slot-names copy)
+      (when (slot-boundp original slot)
+        (setf (slot-value copy slot) (slot-value original slot))))))

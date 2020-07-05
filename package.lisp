@@ -64,4 +64,5 @@
    #:make-dumped-stream
    #:alternatingly
    #:downcase-lisp-file
-   #:upcase-lisp-file))
+   #:upcase-lisp-file
+   #:shallow-copy-object))
