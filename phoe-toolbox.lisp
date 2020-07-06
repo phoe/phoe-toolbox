@@ -640,3 +640,19 @@ keyword-value pairs."
       (when (slot-boundp original slot)
         (setf (slot-value copy slot) (slot-value original slot))))
     (apply #'reinitialize-instance copy initargs)))
+
+(defpackage #:phoe-toolbox/list-of (:use))
+
+(deftype list-of (type)
+  "A type specifier that matches a list whose all elements are of the given
+type."
+  (check-type type symbol) ; Kludge - maybe we'll fix that later.
+  (let* ((package-name (package-name (symbol-package type)))
+         (symbol-name (symbol-name type))
+         (predicate-name (format nil "LIST-OF ~S ~S" package-name symbol-name))
+         (package (find-package '#:phoe-toolbox/list-of))
+         (predicate (intern predicate-name package)))
+    (unless (fboundp predicate)
+      (setf (fdefinition predicate)
+            (lambda (list) (every (rcurry #'typep type) list))))
+    `(satisfies ,predicate)))

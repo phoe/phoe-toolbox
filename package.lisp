@@ -65,4 +65,5 @@
    #:alternatingly
    #:downcase-lisp-file
    #:upcase-lisp-file
-   #:shallow-copy-object))
+   #:shallow-copy-object
+   #:list-of))
