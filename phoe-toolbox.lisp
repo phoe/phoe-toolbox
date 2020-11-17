@@ -86,15 +86,12 @@ it returns the value of BODY."
 (defmacro finalized-let* ((&rest bindings) &body body)
   "Like LET*, except each variable binding is of form (var initform . forms)
 where FORMS will be evaluated when leaving the LET* by means of UNWIND-PROTECT.
-These forms will be evaluated from last binding to first."
+These forms will be evaluated from last binding to first. Each binding has its
+own individual UNWIND-PROTECT cleanup."
   (if bindings
-      `(let (,(first (first bindings)))
-         (unwind-protect
-              (progn (setf ,(first (first bindings))
-                           ,(second (first bindings)))
-                     (finalized-let* ,(rest bindings) ,@body))
-           (when ,(first (first bindings))
-             (progn ,@(cddr (first bindings))))))
+      (destructuring-bind ((var &optional val &rest forms) . rest) bindings
+        `(let ((,var ,val))
+           (unwind-protect (finalized-let* ,rest ,@body) ,@forms)))
       `(progn ,@body)))
 
 (defmacro with-temp-package (&body body)
