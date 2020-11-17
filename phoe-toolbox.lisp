@@ -658,8 +658,6 @@ type."
 
 (defvar *call-with-handler-cache* (make-hash-table :test #'equal))
 
-(defvar *call-with-restart-cache* (make-hash-table :test #'equal))
-
 (defun ensure-call-with-handler-function (condition-type)
   (multiple-value-bind (value foundp)
       (gethash condition-type *call-with-handler-cache*)
@@ -676,6 +674,8 @@ type."
   "The functional variant of HANDLER-BIND."
   (funcall (ensure-call-with-handler-function condition-type)
            handler-function thunk))
+
+(defvar *call-with-restart-cache* (make-hash-table :test #'equal))
 
 (defun ensure-call-with-restart-function
     (restart-name interactive-p report-p test-p)
