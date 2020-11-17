@@ -655,3 +655,55 @@ type."
     (setf (fdefinition predicate)
           (lambda (list) (every (rcurry #'typep type) list)))
     `(satisfies ,predicate)))
+
+(defvar *call-with-handler-cache* (make-hash-table :test #'equal))
+
+(defvar *call-with-restart-cache* (make-hash-table :test #'equal))
+
+(defun ensure-call-with-handler-function (condition-type)
+  (multiple-value-bind (value foundp)
+      (gethash condition-type *call-with-handler-cache*)
+    (if foundp
+        value
+        (let ((lambda-form
+                `(lambda (handler-function thunk)
+                   (handler-bind ((,condition-type handler-function))
+                     (funcall thunk)))))
+          (setf (gethash condition-type *call-with-handler-cache*)
+                (coerce lambda-form 'function))))))
+
+(defun call-with-handler (thunk condition-type handler-function)
+  "The functional variant of HANDLER-BIND."
+  (funcall (ensure-call-with-handler-function condition-type)
+           handler-function thunk))
+
+(defun ensure-call-with-restart-function
+    (restart-name interactive-p report-p test-p)
+  (let ((key (list restart-name interactive-p report-p test-p)))
+    (multiple-value-bind (value foundp) (gethash key *call-with-restart-cache*)
+      (if foundp
+          value
+          (let ((lambda-form
+                  `(lambda (restart-function thunk interactive report test)
+                     (declare (ignorable interactive report test))
+                     (restart-bind
+                         ((,restart-name
+                            restart-function
+                            ,@(when interactive-p
+                                `(:interactive-function interactive))
+                            ,@(when report-p `(:report-function report))
+                            ,@(when test-p `(:test-function test))))
+                       (funcall thunk)))))
+            (setf (gethash key *call-with-restart-cache*)
+                  (coerce lambda-form 'function)))))))
+
+(defun call-with-restart (thunk restart-name restart-function
+                          &key (interactive-function nil interactive-p)
+                            (report-function nil report-p)
+                            (test-function nil test-p))
+  "The functional variant of RESTART-BIND."
+  (let ((function (ensure-call-with-restart-function
+                   restart-name
+                   (and interactive-p t) (and report-p t) (and test-p t))))
+    (funcall function restart-function thunk
+             interactive-function report-function test-function)))

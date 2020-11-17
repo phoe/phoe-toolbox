@@ -66,4 +66,6 @@
    #:downcase-lisp-file
    #:upcase-lisp-file
    #:shallow-copy-object
-   #:list-of))
+   #:list-of
+   #:call-with-handler
+   #:call-with-restart))
