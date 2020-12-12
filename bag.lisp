@@ -40,5 +40,6 @@
         (values result t))))
 
 (defun bag-compress (bag)
+  (check-type bag bag)
   (adjust-array (bag-contents bag) (bag-count bag))
   (values))
