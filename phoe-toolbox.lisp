@@ -398,8 +398,7 @@ is replaced with replacement."
 (defun string=-getf (plist indicator)
   "Like GETF, except it tests with STRING= and is there suitable for use
 with strings and symbols."
-  (loop for key in plist by #'cddr
-        for value in (rest plist) by #'cddr
+  (loop for (key value) on plist by #'cddr
         when (and (string= key indicator))
           return value))
 
