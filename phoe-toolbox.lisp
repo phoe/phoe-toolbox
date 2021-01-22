@@ -399,7 +399,7 @@ is replaced with replacement."
   "Like GETF, except it tests with STRING= and is there suitable for use
 with strings and symbols."
   (loop for (key value) on plist by #'cddr
-        when (and (string= key indicator))
+        when (string= key indicator)
           return value))
 
 (defun peek-char-no-hang (&optional (input-stream *standard-input*)
